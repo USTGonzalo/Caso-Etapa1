@@ -42,7 +42,7 @@ Somos un equipo de **4 integrantes**:
 - Integrante 3: Ignacia
 - Integrante 4: ___________________
 - Integrante 5: Gonzalo Fuentes
-- 
+
 ---
 
 ## 📄 Fuente del Proyecto
