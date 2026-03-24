@@ -39,8 +39,8 @@ Somos un equipo de **4 integrantes**:
 
 - Integrante 1: Diego Soto
 - Integrante 2: Pedro Castro
-- Integrante 3: Ignacia
-- Integrante 4: ___________________
+- Integrante 3: Ignacia Mamani
+- Integrante 4: Danka Tapia
 - Integrante 5: Gonzalo Fuentes
 
 ---
