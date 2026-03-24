@@ -46,7 +46,7 @@ Somos un equipo de **4 integrantes**:
 ---
 
 ## 📄 Fuente del Proyecto
-Este proyecto se basa en el caso de estudio proporcionado en la asignatura **Integración de Competencias I**. :contentReference[oaicite:0]{index=0}
+Este proyecto se basa en el caso de estudio proporcionado en la asignatura **Integración de Competencias I**
 
 ---
 
