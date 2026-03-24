@@ -35,7 +35,7 @@ Automatizar el control del kilometraje y mantenimiento de los camiones para:
 
 ## 👥 Equipo de Desarrollo
 
-Somos un equipo de **4 integrantes**:
+Somos un equipo de **5 integrantes**:
 
 - Integrante 1: Diego Soto
 - Integrante 2: Pedro Castro
