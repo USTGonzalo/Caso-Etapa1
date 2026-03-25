@@ -3,9 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package windows;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import Conexion.BasedeDatos;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,6 +24,7 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     BasedeDatos MySQL = new BasedeDatos();
+
     public Login() {
         initComponents();
         // Espera a que el JLabel tenga tamaño real
@@ -122,8 +128,44 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLoginActionPerformed
-        // TODO add your handling code here:
-        MySQL.conectar();
+        String usuario = TxtUser.getText();
+        String pass = new String(TxtPass.getPassword());
+
+        BasedeDatos bd = new BasedeDatos();
+        Connection conn = bd.conectar();
+
+        if (conn != null) {
+            try {
+                String sql = "SELECT * FROM conductores WHERE nombre = ? AND pass = ? AND estado = 1";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, usuario);
+                ps.setString(2, pass);
+
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    // 🔥 Usuario válido
+                    boolean esAdmin = rs.getBoolean("admin");
+
+                    if (esAdmin) {
+                        Admin admin = new Admin();
+                        admin.setVisible(true);
+                        admin.setLocationRelativeTo(null);
+                        admin.pack();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Bienvenido usuario normal");
+                    }
+
+                    this.dispose();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos o inactivo");
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_BtnLoginActionPerformed
 
     private void TxtUserFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtUserFocusGained
