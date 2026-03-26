@@ -148,7 +148,7 @@ public class Login extends javax.swing.JFrame {
                     boolean esAdmin = rs.getBoolean("admin");
 
                     if (esAdmin) {
-                        Admin admin = new Admin();
+                        Drivers admin = new Drivers();
                         admin.setVisible(true);
                         admin.setLocationRelativeTo(null);
                         admin.pack();
