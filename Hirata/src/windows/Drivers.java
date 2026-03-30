@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import Conexion.BasedeDatos;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class Drivers extends javax.swing.JFrame {
 
@@ -136,6 +137,7 @@ public class Drivers extends javax.swing.JFrame {
         CbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Habilitado", "Deshabilitado" }));
 
         BtnBack.setText("Volver");
+        BtnBack.addActionListener(this::BtnBackActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,27 +153,25 @@ public class Drivers extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                    .addComponent(TxtName)
+                    .addComponent(TxtID)
+                    .addComponent(jSeparator3)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TxtNumber)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TxtName)
-                            .addComponent(TxtID)
-                            .addComponent(jSeparator3)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TxtNumber)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(BtnAdd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BtnUpdate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BtnDelete)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(BtnBack))
-                            .addComponent(CbStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                        .addComponent(BtnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BtnUpdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BtnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addComponent(BtnBack))
+                    .addComponent(CbStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,6 +226,7 @@ public class Drivers extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         cargarConductores();
+        centrarTablaDrivers();
     }//GEN-LAST:event_formWindowOpened
 
     private void BtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAddActionPerformed
@@ -236,7 +237,7 @@ public class Drivers extends javax.swing.JFrame {
 
         // Validar campos vacíos
         if (name.isEmpty() || number.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             return; // 🔥 Detiene la ejecución
         }
 
@@ -274,6 +275,7 @@ public class Drivers extends javax.swing.JFrame {
 
             // Recargar tabla
             cargarConductores();
+            centrarTablaDrivers();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -346,6 +348,7 @@ public class Drivers extends javax.swing.JFrame {
 
             // Recargar tabla
             cargarConductores();
+            centrarTablaDrivers();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -438,6 +441,7 @@ public class Drivers extends javax.swing.JFrame {
 
             // Recargar tabla
             cargarConductores();
+            centrarTablaDrivers();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -448,100 +452,117 @@ public class Drivers extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnDeleteActionPerformed
 
-        public static String generarPassword(int longitud) {
-            String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            StringBuilder pass = new StringBuilder();
-            Random random = new Random();
+    private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
+        // TODO add your handling code here:
+        Admin admin = new Admin();
+        admin.setVisible(true);
+        admin.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_BtnBackActionPerformed
 
-            for (int i = 0; i < longitud; i++) {
-                int index = random.nextInt(caracteres.length());
-                pass.append(caracteres.charAt(index));
-            }
+    public static String generarPassword(int longitud) {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder pass = new StringBuilder();
+        Random random = new Random();
 
-            return pass.toString();
+        for (int i = 0; i < longitud; i++) {
+            int index = random.nextInt(caracteres.length());
+            pass.append(caracteres.charAt(index));
         }
 
-        private void TableDriversMouseClicked(java.awt.event.MouseEvent evt) {
-            int fila = TableDrivers.getSelectedRow();
+        return pass.toString();
+    }
 
-            if (fila >= 0) {
-                // Obtener datos de la tabla
-                TxtID.setText(TableDrivers.getValueAt(fila, 0).toString());
-                TxtName.setText(TableDrivers.getValueAt(fila, 1).toString());
-                TxtNumber.setText(TableDrivers.getValueAt(fila, 2).toString());
+    private void TableDriversMouseClicked(java.awt.event.MouseEvent evt) {
+        int fila = TableDrivers.getSelectedRow();
 
-                // Estado (boolean → texto)
-                boolean estado = (boolean) TableDrivers.getValueAt(fila, 4);
+        if (fila >= 0) {
+            // Obtener datos de la tabla
+            TxtID.setText(TableDrivers.getValueAt(fila, 0).toString());
+            TxtName.setText(TableDrivers.getValueAt(fila, 1).toString());
+            TxtNumber.setText(TableDrivers.getValueAt(fila, 2).toString());
 
-                if (estado) {
-                    CbStatus.setSelectedItem("Habilitado");
-                } else {
-                    CbStatus.setSelectedItem("Deshabilitado");
-                }
+            // Estado (boolean → texto)
+            boolean estado = (boolean) TableDrivers.getValueAt(fila, 4);
+
+            if (estado) {
+                CbStatus.setSelectedItem("Habilitado");
+            } else {
+                CbStatus.setSelectedItem("Deshabilitado");
             }
         }
+    }
 
-        private void cargarConductores() {
-            DefaultTableModel modelo = new DefaultTableModel();
+    private void cargarConductores() {
+        DefaultTableModel modelo = new DefaultTableModel();
 
-            modelo.addColumn("ID");
-            modelo.addColumn("Nombre");
-            modelo.addColumn("Teléfono");
-            modelo.addColumn("Fecha Registro");
-            modelo.addColumn("Estado");
+        modelo.addColumn("ID");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Teléfono");
+        modelo.addColumn("Fecha Registro");
+        modelo.addColumn("Estado");
 
-            BasedeDatos bd = new BasedeDatos();
-            Connection conn = bd.conectar();
+        BasedeDatos bd = new BasedeDatos();
+        Connection conn = bd.conectar();
 
-            if (conn != null) {
-                try {
-                    String sql = "SELECT ID_conductor, nombre, telefono, fecha_registro, estado FROM conductores";
-                    PreparedStatement ps = conn.prepareStatement(sql);
-                    ResultSet rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        Object[] fila = new Object[5];
-                        fila[0] = rs.getInt("ID_conductor");
-                        fila[1] = rs.getString("nombre");
-                        fila[2] = rs.getString("telefono");
-                        fila[3] = rs.getString("fecha_registro");
-                        fila[4] = rs.getBoolean("estado"); // true / false
-
-                        modelo.addRow(fila);
-                    }
-
-                    TableDrivers.setModel(modelo);
-
-                } catch (Exception e) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-                }
-            }
-        }
-
-        /**
-         * @param args the command line arguments
-         */
-        public static void main(String args[]) {
-            /* Set the Nimbus look and feel */
-            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-             */
+        if (conn != null) {
             try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
-                }
-            } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-                logger.log(java.util.logging.Level.SEVERE, null, ex);
-            }
-            //</editor-fold>
+                String sql = "SELECT ID_conductor, nombre, telefono, fecha_registro, estado FROM conductores";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
 
-            /* Create and display the form */
-            java.awt.EventQueue.invokeLater(() -> new Drivers().setVisible(true));
+                while (rs.next()) {
+                    Object[] fila = new Object[5];
+                    fila[0] = rs.getInt("ID_conductor");
+                    fila[1] = rs.getString("nombre");
+                    fila[2] = rs.getString("telefono");
+                    fila[3] = rs.getString("fecha_registro");
+                    fila[4] = rs.getBoolean("estado"); // true / false
+
+                    modelo.addRow(fila);
+                }
+
+                TableDrivers.setModel(modelo);
+
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
         }
+    }
+
+    private void centrarTablaDrivers() {
+        DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
+        centro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        for (int i = 0; i < TableDrivers.getColumnCount(); i++) {
+            TableDrivers.getColumnModel().getColumn(i).setCellRenderer(centro);
+        }
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new Drivers().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAdd;

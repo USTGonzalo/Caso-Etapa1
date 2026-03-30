@@ -144,14 +144,14 @@ public class Login extends javax.swing.JFrame {
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
-                    // 🔥 Usuario válido
+                    // Se realiza solo si el usuario es válido
                     boolean esAdmin = rs.getBoolean("admin");
 
                     if (esAdmin) {
-                        Drivers admin = new Drivers();
-                        admin.setVisible(true);
-                        admin.setLocationRelativeTo(null);
-                        admin.pack();
+                        Admin panel = new Admin();
+                        panel.setVisible(true);
+                        panel.setLocationRelativeTo(null);
+                        panel.pack();
                     } else {
                         JOptionPane.showMessageDialog(this, "Bienvenido usuario normal");
                     }
@@ -159,7 +159,7 @@ public class Login extends javax.swing.JFrame {
                     this.dispose();
 
                 } else {
-                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos o inactivo");
+                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos o inactivo", "Error", JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (Exception e) {
