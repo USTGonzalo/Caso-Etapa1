@@ -80,6 +80,7 @@ public class Normal extends javax.swing.JFrame {
         BtnRegister.setText("Ingresar kilometraje");
 
         BtnMaintenance.setText("Realizar mantención");
+        BtnMaintenance.addActionListener(this::BtnMaintenanceActionPerformed);
 
         jButton4.setText("Sistema offline");
 
@@ -188,6 +189,15 @@ public class Normal extends javax.swing.JFrame {
         login.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_BtnLogoutActionPerformed
+
+    private void BtnMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMaintenanceActionPerformed
+        // TODO add your handling code here:
+        Maintenance maintenance = new Maintenance(isAdmin);
+        maintenance.setVisible(true);
+        maintenance.setLocationRelativeTo(null);
+        maintenance.pack();
+        this.dispose();
+    }//GEN-LAST:event_BtnMaintenanceActionPerformed
 
     /**
      * @param args the command line arguments

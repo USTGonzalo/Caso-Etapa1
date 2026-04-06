@@ -30,6 +30,7 @@ public class Maintenance extends javax.swing.JFrame {
     private int idCamion;
 
     private boolean isAdmin = false;
+
     public Maintenance(boolean isAdmin) {
         initComponents();
         this.isAdmin = isAdmin;
@@ -213,6 +214,13 @@ public class Maintenance extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
         cargarMantenimientos();
+        if (isAdmin) {
+            BtnActMaintenance.setEnabled(true);
+            BtnDeleteMaintenance.setEnabled(true);
+        } else {
+            BtnActMaintenance.setEnabled(false);
+            BtnDeleteMaintenance.setEnabled(false);
+        }
 
     }//GEN-LAST:event_formWindowActivated
 
@@ -222,10 +230,17 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin panel = new Admin(isAdmin);
-        panel.setVisible(true);
-        panel.setLocationRelativeTo(null);
-        panel.pack();
+        if (isAdmin) {
+            Admin panel = new Admin(isAdmin);
+            panel.setVisible(true);
+            panel.setLocationRelativeTo(null);
+            panel.pack();
+        } else {
+            Normal panel = new Normal(isAdmin);
+            panel.setVisible(true);
+            panel.setLocationRelativeTo(null);
+            panel.pack();
+        }
         this.dispose();
     }//GEN-LAST:event_BtnBackActionPerformed
 
@@ -335,17 +350,17 @@ public class Maintenance extends javax.swing.JFrame {
     }
 
     private void TbMaintenanceMouseClicked(java.awt.event.MouseEvent evt) {
-    int fila = TblMaintenance.getSelectedRow();
+        int fila = TblMaintenance.getSelectedRow();
 
-    if (fila >= 0) {
-        IdMantencion = Integer.parseInt(TblMaintenance.getValueAt(fila, 0).toString());
-        km = Integer.parseInt(TblMaintenance.getValueAt(fila, 1).toString());
-        tipo = TblMaintenance.getValueAt(fila, 2).toString();
-        descripcion = TblMaintenance.getValueAt(fila, 3).toString();
-        estado = TblMaintenance.getValueAt(fila, 5).toString();
-        idCamion = Integer.parseInt(TblMaintenance.getValueAt(fila, 6).toString());
+        if (fila >= 0) {
+            IdMantencion = Integer.parseInt(TblMaintenance.getValueAt(fila, 0).toString());
+            km = Integer.parseInt(TblMaintenance.getValueAt(fila, 1).toString());
+            tipo = TblMaintenance.getValueAt(fila, 2).toString();
+            descripcion = TblMaintenance.getValueAt(fila, 3).toString();
+            estado = TblMaintenance.getValueAt(fila, 5).toString();
+            idCamion = Integer.parseInt(TblMaintenance.getValueAt(fila, 6).toString());
+        }
     }
-}
 
     /**
      * @param args the command line arguments
