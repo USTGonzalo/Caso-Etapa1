@@ -22,6 +22,7 @@ public class Drivers extends javax.swing.JFrame {
      */
     public Drivers() {
         initComponents();
+        //Agregamos una acción que permite leer el click del mouse
         TableDrivers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TableDriversMouseClicked(evt);
@@ -224,18 +225,19 @@ public class Drivers extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtIDActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
+
+        //Acciones que realiza al abrir la ventana
         cargarConductores();
         centrarTablaDrivers();
     }//GEN-LAST:event_formWindowOpened
 
     private void BtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAddActionPerformed
-        // TODO add your handling code here:
+
         // Obtener datos
         String name = TxtName.getText().trim();
         String number = TxtNumber.getText().trim();
 
-        // Validar campos vacíos
+        // Validaciones de campos vacios
         if (name.isEmpty() || number.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             return; // 🔥 Detiene la ejecución
@@ -361,7 +363,7 @@ public class Drivers extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnUpdateActionPerformed
 
     private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteActionPerformed
-        // TODO add your handling code here
+
         // Obtener ID
         String idTexto = TxtID.getText().trim();
 
@@ -460,6 +462,7 @@ public class Drivers extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_BtnBackActionPerformed
 
+    //Funcion para generar contraseña aleatoria
     public static String generarPassword(int longitud) {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder pass = new StringBuilder();
@@ -482,7 +485,7 @@ public class Drivers extends javax.swing.JFrame {
             TxtName.setText(TableDrivers.getValueAt(fila, 1).toString());
             TxtNumber.setText(TableDrivers.getValueAt(fila, 2).toString());
 
-            // Estado (boolean → texto)
+            // Estado (boolean a texto)
             boolean estado = (boolean) TableDrivers.getValueAt(fila, 4);
 
             if (estado) {
