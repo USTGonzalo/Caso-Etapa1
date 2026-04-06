@@ -29,8 +29,10 @@ public class Maintenance extends javax.swing.JFrame {
     private String estado;
     private int idCamion;
 
-    public Maintenance() {
+    private boolean isAdmin = false;
+    public Maintenance(boolean isAdmin) {
         initComponents();
+        this.isAdmin = isAdmin;
         TblMaintenance.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TbMaintenanceMouseClicked(evt);
@@ -101,7 +103,7 @@ public class Maintenance extends javax.swing.JFrame {
 
         TxtSearchType.setText("Busqueda por tipo");
 
-        TxtSearchState.setText("Busqueda por estado");
+        TxtSearchState.setText("Busqueda por fecha");
         TxtSearchState.addActionListener(this::TxtSearchStateActionPerformed);
 
         TxtSearchId.setText("Busqueda por ID");
@@ -201,7 +203,7 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void BtnNewMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnNewMaintenanceActionPerformed
         // TODO add your handling code here:
-        MaintenanceAdd NewMaintenance = new MaintenanceAdd();
+        MaintenanceAdd NewMaintenance = new MaintenanceAdd(isAdmin);
         NewMaintenance.setVisible(true);
         NewMaintenance.setLocationRelativeTo(null);
         NewMaintenance.pack();
@@ -220,7 +222,7 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin panel = new Admin();
+        Admin panel = new Admin(isAdmin);
         panel.setVisible(true);
         panel.setLocationRelativeTo(null);
         panel.pack();
@@ -233,7 +235,7 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void BtnActMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActMaintenanceActionPerformed
         // TODO add your handling code here:
-        MaintenanceAct EditMaintenance = new MaintenanceAct(IdMantencion, km, tipo, descripcion, estado, idCamion);
+        MaintenanceAct EditMaintenance = new MaintenanceAct(IdMantencion, km, tipo, descripcion, estado, idCamion, isAdmin);
         EditMaintenance.setVisible(true);
         EditMaintenance.setLocationRelativeTo(null);
         EditMaintenance.pack();
@@ -367,7 +369,7 @@ public class Maintenance extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Maintenance().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new Maintenance().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

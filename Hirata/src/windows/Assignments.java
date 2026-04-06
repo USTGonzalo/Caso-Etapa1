@@ -25,8 +25,10 @@ public class Assignments extends javax.swing.JFrame {
     /**
      * Creates new form Assignments
      */
-    public Assignments() {
+    private boolean isAdmin = false;
+    public Assignments(boolean isAdmin) {
         initComponents();
+        this.isAdmin = isAdmin;
         TblDrivers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TableDriversMouseClicked(evt);
@@ -422,7 +424,7 @@ public class Assignments extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin admin = new Admin();
+        Admin admin = new Admin(isAdmin);
         admin.setVisible(true);
         admin.setLocationRelativeTo(null);
         this.dispose();
@@ -541,7 +543,7 @@ public class Assignments extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Assignments().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new Assignments().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

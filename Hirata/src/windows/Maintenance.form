@@ -180,7 +180,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="TxtSearchState">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Busqueda por estado"/>
+        <Property name="text" type="java.lang.String" value="Busqueda por fecha"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TxtSearchStateActionPerformed"/>

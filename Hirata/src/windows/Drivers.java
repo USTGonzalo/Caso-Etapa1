@@ -20,8 +20,10 @@ public class Drivers extends javax.swing.JFrame {
     /**
      * Creates new form admin
      */
-    public Drivers() {
+    private boolean isAdmin = false;
+    public Drivers(boolean isAdmin) {
         initComponents();
+        this.isAdmin = isAdmin;
         //Agregamos una acción que permite leer el click del mouse
         TableDrivers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -456,7 +458,7 @@ public class Drivers extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin admin = new Admin();
+        Admin admin = new Admin(isAdmin);
         admin.setVisible(true);
         admin.setLocationRelativeTo(null);
         this.dispose();
@@ -564,7 +566,7 @@ public class Drivers extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Drivers().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new Drivers().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
