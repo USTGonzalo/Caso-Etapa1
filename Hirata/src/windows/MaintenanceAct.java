@@ -23,9 +23,11 @@ public class MaintenanceAct extends javax.swing.JFrame {
      */
     private int IdMantencion = -1;
 
-    public MaintenanceAct(int id, int km, String tipo, String descripcion, String estado, int idCamion) {
+    private boolean isAdmin = false;
+    public MaintenanceAct(int id, int km, String tipo, String descripcion, String estado, int idCamion, boolean isAdmin) {
     initComponents();
 
+    this.isAdmin = isAdmin;
     this.IdMantencion = id;
 
     TxtKm.setText(String.valueOf(km));
@@ -232,7 +234,7 @@ public class MaintenanceAct extends javax.swing.JFrame {
                 if (resultado > 0) {
                     JOptionPane.showMessageDialog(this, "Mantenimiento actualizado correctamente");
 
-                    Maintenance maintenance = new Maintenance();
+                    Maintenance maintenance = new Maintenance(isAdmin);
                     maintenance.setVisible(true);
                     maintenance.setLocationRelativeTo(null);
                     maintenance.pack();
@@ -250,7 +252,7 @@ public class MaintenanceAct extends javax.swing.JFrame {
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
         // TODO add your handling code here:
-        Maintenance maintenance = new Maintenance();
+        Maintenance maintenance = new Maintenance(isAdmin);
         maintenance.setVisible(true);
         maintenance.setLocationRelativeTo(null);
         maintenance.pack();

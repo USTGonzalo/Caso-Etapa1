@@ -20,13 +20,15 @@ public class Login extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
 
+    private boolean isAdmin = false;
     /**
      * Creates new form Login
      */
     BasedeDatos MySQL = new BasedeDatos();
 
-    public Login() {
+    public Login(boolean isAdmin) {
         initComponents();
+        this.isAdmin = isAdmin;
         // Espera a que el JLabel tenga tamaño real
         java.awt.EventQueue.invokeLater(() -> {
             setImagen(jLabel1, "/images/logoHirata.png");
@@ -146,15 +148,18 @@ public class Login extends javax.swing.JFrame {
 
                 if (rs.next()) {
                     // Se realiza solo si el usuario es válido
-                    boolean esAdmin = rs.getBoolean("admin");
+                    isAdmin = rs.getBoolean("admin");
 
-                    if (esAdmin) {
-                        Admin panel = new Admin();
+                    if (isAdmin) {
+                        Admin panel = new Admin(isAdmin);
                         panel.setVisible(true);
                         panel.setLocationRelativeTo(null);
                         panel.pack();
                     } else {
-                        JOptionPane.showMessageDialog(this, "Bienvenido usuario normal");
+                        Normal panel = new Normal(isAdmin);
+                        panel.setVisible(true);
+                        panel.setLocationRelativeTo(null);
+                        panel.pack();
                     }
 
                     this.dispose();
@@ -219,7 +224,7 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

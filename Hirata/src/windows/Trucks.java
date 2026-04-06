@@ -23,8 +23,10 @@ public class Trucks extends javax.swing.JFrame {
     /**
      * Creates new form Trucks
      */
-    public Trucks() {
+    private boolean isAdmin = false;
+    public Trucks(boolean isAdmin) {
         initComponents();
+        this.isAdmin = isAdmin;
         TblTruck.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TbTrucksMouseClicked(evt);
@@ -460,7 +462,7 @@ public class Trucks extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin admin = new Admin();
+        Admin admin = new Admin(isAdmin);
         admin.setVisible(true);
         admin.setLocationRelativeTo(null);
         this.dispose();
@@ -549,7 +551,7 @@ public class Trucks extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Trucks().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new Trucks().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

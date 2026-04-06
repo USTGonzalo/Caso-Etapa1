@@ -25,8 +25,10 @@ public class MaintenanceAdd extends javax.swing.JFrame {
      */
     private int IdMantencion = -1;
 
-    public MaintenanceAdd() {
+    private boolean isAdmin = false;
+    public MaintenanceAdd(boolean isAdmin) {
         initComponents();
+        this.isAdmin = isAdmin;
         TblTrucks.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TbTrucksMouseClicked(evt);
@@ -294,7 +296,7 @@ public class MaintenanceAdd extends javax.swing.JFrame {
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
         // TODO add your handling code here:
-        Maintenance maintenance = new Maintenance();
+        Maintenance maintenance = new Maintenance(isAdmin);
         maintenance.setVisible(true);
         maintenance.setLocationRelativeTo(null);
         maintenance.pack();
@@ -379,7 +381,7 @@ public class MaintenanceAdd extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MaintenanceAdd().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new MaintenanceAdd().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
