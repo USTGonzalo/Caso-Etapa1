@@ -31,9 +31,12 @@ public class Maintenance extends javax.swing.JFrame {
 
     private boolean isAdmin = false;
 
-    public Maintenance(boolean isAdmin) {
+    private int userId = -1;
+
+    public Maintenance(boolean isAdmin, int userId) {
         initComponents();
         this.isAdmin = isAdmin;
+        this.userId = userId;
         TblMaintenance.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TbMaintenanceMouseClicked(evt);
@@ -204,7 +207,7 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void BtnNewMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnNewMaintenanceActionPerformed
         // TODO add your handling code here:
-        MaintenanceAdd NewMaintenance = new MaintenanceAdd(isAdmin);
+        MaintenanceAdd NewMaintenance = new MaintenanceAdd(isAdmin, userId);
         NewMaintenance.setVisible(true);
         NewMaintenance.setLocationRelativeTo(null);
         NewMaintenance.pack();
@@ -213,13 +216,15 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
-        cargarMantenimientos();
+
         if (isAdmin) {
             BtnActMaintenance.setEnabled(true);
             BtnDeleteMaintenance.setEnabled(true);
+            cargarMantenimientosAdmin();
         } else {
             BtnActMaintenance.setEnabled(false);
             BtnDeleteMaintenance.setEnabled(false);
+            cargarMantenimientosNormal();
         }
 
     }//GEN-LAST:event_formWindowActivated
@@ -231,12 +236,12 @@ public class Maintenance extends javax.swing.JFrame {
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
         if (isAdmin) {
-            Admin panel = new Admin(isAdmin);
+            Admin panel = new Admin(isAdmin, userId);
             panel.setVisible(true);
             panel.setLocationRelativeTo(null);
             panel.pack();
         } else {
-            Normal panel = new Normal(isAdmin);
+            Normal panel = new Normal(isAdmin, userId);
             panel.setVisible(true);
             panel.setLocationRelativeTo(null);
             panel.pack();
@@ -250,7 +255,7 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void BtnActMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActMaintenanceActionPerformed
         // TODO add your handling code here:
-        MaintenanceAct EditMaintenance = new MaintenanceAct(IdMantencion, km, tipo, descripcion, estado, idCamion, isAdmin);
+        MaintenanceAct EditMaintenance = new MaintenanceAct(IdMantencion, km, tipo, descripcion, estado, idCamion, isAdmin, userId);
         EditMaintenance.setVisible(true);
         EditMaintenance.setLocationRelativeTo(null);
         EditMaintenance.pack();
@@ -292,7 +297,11 @@ public class Maintenance extends javax.swing.JFrame {
                     IdMantencion = -1;
 
                     // Recargar tabla
-                    cargarMantenimientos();
+                    if (isAdmin) {
+                        cargarMantenimientosAdmin();
+                    } else {
+                        cargarMantenimientosNormal();
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar");
@@ -304,7 +313,7 @@ public class Maintenance extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnDeleteMaintenanceActionPerformed
 
-    private void cargarMantenimientos() {
+    private void cargarMantenimientosAdmin() {
         DefaultTableModel modelo = new DefaultTableModel();
 
         modelo.addColumn("ID");
@@ -322,6 +331,57 @@ public class Maintenance extends javax.swing.JFrame {
             try {
                 String sql = "SELECT * FROM mantenimientos";
                 PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    Object[] fila = new Object[7];
+                    fila[0] = rs.getInt("id_mantenimiento");
+                    fila[1] = rs.getInt("ultimo_kilometraje");
+                    fila[2] = rs.getString("tipo");
+                    fila[3] = rs.getString("descripcion");
+                    fila[4] = rs.getString("fecha");
+                    fila[5] = rs.getString("estado");
+                    fila[6] = rs.getInt("id_camion");
+
+                    modelo.addRow(fila);
+                }
+
+                TblMaintenance.setModel(modelo);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    private void cargarMantenimientosNormal() {
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        modelo.addColumn("ID");
+        modelo.addColumn("Kilometraje");
+        modelo.addColumn("Tipo");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Estado");
+        modelo.addColumn("ID Camión");
+
+        BasedeDatos bd = new BasedeDatos();
+        Connection conn = bd.conectar();
+
+        if (conn != null) {
+            try {
+                String sql = "SELECT m.* "
+                        + "FROM mantenimientos m "
+                        + "INNER JOIN camion_conductor cc ON m.id_camion = cc.id_camion "
+                        + "WHERE cc.id_conductor = ?";
+
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, userId); // 🔥 AQUÍ FILTRAS POR USUARIO
+
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {

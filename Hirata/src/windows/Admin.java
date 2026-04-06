@@ -16,9 +16,11 @@ public class Admin extends javax.swing.JFrame {
      * Creates new form Admin
      */
     private boolean isAdmin = false;
-    public Admin(boolean isAdmin) {
+    private int userId = -1;
+    public Admin(boolean isAdmin, int userId) {
         initComponents();
         this.isAdmin = isAdmin;
+        this.userId = userId;
     }
 
     /**
@@ -109,7 +111,7 @@ public class Admin extends javax.swing.JFrame {
     private void BtnDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDriversActionPerformed
 
         //Abre la ventana de los conductores
-        Drivers drivers = new Drivers(isAdmin);
+        Drivers drivers = new Drivers(isAdmin, userId);
         drivers.setVisible(true);
         drivers.setLocationRelativeTo(null);
         drivers.pack();
@@ -119,7 +121,7 @@ public class Admin extends javax.swing.JFrame {
     private void BtnTrucksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTrucksActionPerformed
 
         //Abre la ventana de los camiones
-        Trucks trucks = new Trucks(isAdmin);
+        Trucks trucks = new Trucks(isAdmin, userId);
         trucks.setVisible(true);
         trucks.setLocationRelativeTo(null);
         trucks.pack();
@@ -129,7 +131,7 @@ public class Admin extends javax.swing.JFrame {
     private void BtnAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAssignActionPerformed
 
         //Abre la ventana para asignar camiones a conductores
-        Assignments assign = new Assignments(isAdmin);
+        Assignments assign = new Assignments(isAdmin, userId);
         assign.setVisible(true);
         assign.setLocationRelativeTo(null);
         assign.pack();
@@ -139,7 +141,7 @@ public class Admin extends javax.swing.JFrame {
     private void BtnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLogoutActionPerformed
 
         //Cierra sesión
-        Login login = new Login(isAdmin);
+        Login login = new Login(isAdmin, userId);
         login.setVisible(true);
         login.setLocationRelativeTo(null);
         this.dispose();
@@ -148,7 +150,7 @@ public class Admin extends javax.swing.JFrame {
     private void BtnMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMaintenanceActionPerformed
 
         //Abre la ventana de las mantenciones
-        Maintenance maintenance = new Maintenance(isAdmin);
+        Maintenance maintenance = new Maintenance(isAdmin, userId);
         maintenance.setVisible(true);
         maintenance.setLocationRelativeTo(null);
         maintenance.pack();
