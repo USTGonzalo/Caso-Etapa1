@@ -4,21 +4,39 @@
  */
 package windows;
 
+import Conexion.BasedeDatos;
+import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author usuario
  */
 public class Normal extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Normal.class.getName());
 
     /**
      * Creates new form Normal
      */
     private boolean isAdmin = false;
-    public Normal(boolean isAdmin) {
+    private int userId = -1;
+
+    private int idTruck = -1;
+    BasedeDatos MySQL = new BasedeDatos();
+
+    public Normal(boolean isAdmin, int userId) {
         this.isAdmin = isAdmin;
+        this.userId = userId;
         initComponents();
+        TblAssignedTrucks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TbTrucksMouseClicked(evt);
+            }
+        });
     }
 
     /**
@@ -33,7 +51,7 @@ public class Normal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
-        TblTruck = new javax.swing.JTable();
+        TblAssignedTrucks = new javax.swing.JTable();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
@@ -41,7 +59,7 @@ public class Normal extends javax.swing.JFrame {
         BtnMaintenance = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        TxtKm = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
@@ -53,12 +71,17 @@ public class Normal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("CAMIONES ASIGNADOS");
 
-        TblTruck.setModel(new javax.swing.table.DefaultTableModel(
+        TblAssignedTrucks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -69,7 +92,7 @@ public class Normal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(TblTruck);
+        jScrollPane2.setViewportView(TblAssignedTrucks);
 
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -78,6 +101,7 @@ public class Normal extends javax.swing.JFrame {
         jLabel2.setText("KILOMETRAJE");
 
         BtnRegister.setText("Ingresar kilometraje");
+        BtnRegister.addActionListener(this::BtnRegisterActionPerformed);
 
         BtnMaintenance.setText("Realizar mantención");
         BtnMaintenance.addActionListener(this::BtnMaintenanceActionPerformed);
@@ -87,7 +111,15 @@ public class Normal extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Registro de kilometraje");
 
-        jTextField1.setText("Ingrese kilometraje");
+        TxtKm.setText("Ingrese kilometraje");
+        TxtKm.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TxtKmFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TxtKmFocusLost(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -121,7 +153,7 @@ public class Normal extends javax.swing.JFrame {
                     .addComponent(BtnMaintenance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
+                    .addComponent(TxtKm)
                     .addComponent(jSeparator4)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
                     .addComponent(jSeparator5)
@@ -147,13 +179,13 @@ public class Normal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(13, 13, 13)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(TxtKm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(BtnRegister)
                                 .addGap(18, 18, 18)
@@ -184,7 +216,7 @@ public class Normal extends javax.swing.JFrame {
 
     private void BtnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLogoutActionPerformed
         // TODO add your handling code here:
-        Login login = new Login(isAdmin);
+        Login login = new Login(isAdmin, userId);
         login.setVisible(true);
         login.setLocationRelativeTo(null);
         this.dispose();
@@ -192,12 +224,129 @@ public class Normal extends javax.swing.JFrame {
 
     private void BtnMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMaintenanceActionPerformed
         // TODO add your handling code here:
-        Maintenance maintenance = new Maintenance(isAdmin);
+        Maintenance maintenance = new Maintenance(isAdmin, userId);
         maintenance.setVisible(true);
         maintenance.setLocationRelativeTo(null);
         maintenance.pack();
         this.dispose();
     }//GEN-LAST:event_BtnMaintenanceActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        DefaultTableModel model = new DefaultTableModel();
+
+        model.addColumn("ID");
+        model.addColumn("Patente");
+        model.addColumn("Modelo");
+        model.addColumn("Kilometraje");
+
+        TblAssignedTrucks.setModel(model);
+
+        try {
+            BasedeDatos bd = new BasedeDatos();
+            Connection conn = bd.conectar();
+
+            String sql = "SELECT c.id_camion, c.patente, c.modelo, c.kilometraje "
+                    + "FROM camiones c "
+                    + "INNER JOIN camion_conductor cc ON c.id_camion = cc.id_camion "
+                    + "WHERE cc.id_conductor = ?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = new Object[4];
+                fila[0] = rs.getInt("id_camion");
+                fila[1] = rs.getString("patente");
+                fila[2] = rs.getString("modelo");
+                fila[3] = rs.getInt("kilometraje");
+
+                model.addRow(fila);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar camiones: " + e.getMessage());
+        }
+    }//GEN-LAST:event_formWindowActivated
+
+    private void BtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRegisterActionPerformed
+        // TODO add your handling code here:
+        if (idTruck == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Error, debes seleccionar un camión",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (TxtKm.getText().equals("") || TxtKm.getText().equals("Ingrese kilometraje")) {
+            JOptionPane.showMessageDialog(this,
+                    "Ingresa un kilometraje válido",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            int nuevoKm = Integer.parseInt(TxtKm.getText());
+
+            Connection conn = MySQL.conectar();
+
+            String sql = "UPDATE camiones SET kilometraje = ? WHERE id_camion = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, nuevoKm);
+            ps.setInt(2, idTruck);
+
+            int resultado = ps.executeUpdate();
+
+            if (resultado > 0) {
+                JOptionPane.showMessageDialog(this, "Kilometraje actualizado correctamente");
+
+                // Recargar tabla
+                formWindowActivated(null);
+
+                // Limpiar campo
+                TxtKm.setText("Ingrese kilometraje");
+                idTruck = -1;
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "El kilometraje debe ser un número",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al actualizar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnRegisterActionPerformed
+
+    private void TxtKmFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtKmFocusGained
+        // TODO add your handling code here:
+        if ("Ingrese kilometraje".equals(this.TxtKm.getText())) {
+            TxtKm.setText("");
+        }
+    }//GEN-LAST:event_TxtKmFocusGained
+
+    private void TxtKmFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtKmFocusLost
+        // TODO add your handling code here:
+        if ("".equals(this.TxtKm.getText())) {
+            TxtKm.setText("Ingrese kilometraje");
+        }
+    }//GEN-LAST:event_TxtKmFocusLost
+
+    private void TbTrucksMouseClicked(java.awt.event.MouseEvent evt) {
+        int fila = TblAssignedTrucks.getSelectedRow();
+
+        if (fila >= 0) {
+            idTruck = Integer.parseInt(TblAssignedTrucks.getValueAt(fila, 0).toString());
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -228,7 +377,8 @@ public class Normal extends javax.swing.JFrame {
     private javax.swing.JButton BtnLogout;
     private javax.swing.JButton BtnMaintenance;
     private javax.swing.JButton BtnRegister;
-    private javax.swing.JTable TblTruck;
+    private javax.swing.JTable TblAssignedTrucks;
+    private javax.swing.JTextField TxtKm;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -244,6 +394,5 @@ public class Normal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

@@ -24,9 +24,11 @@ public class Trucks extends javax.swing.JFrame {
      * Creates new form Trucks
      */
     private boolean isAdmin = false;
-    public Trucks(boolean isAdmin) {
+    private int userId = -1;
+    public Trucks(boolean isAdmin, int userId) {
         initComponents();
         this.isAdmin = isAdmin;
+        this.userId = userId;
         TblTruck.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TbTrucksMouseClicked(evt);
@@ -462,7 +464,7 @@ public class Trucks extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin admin = new Admin(isAdmin);
+        Admin admin = new Admin(isAdmin, userId);
         admin.setVisible(true);
         admin.setLocationRelativeTo(null);
         this.dispose();

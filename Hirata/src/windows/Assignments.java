@@ -26,9 +26,11 @@ public class Assignments extends javax.swing.JFrame {
      * Creates new form Assignments
      */
     private boolean isAdmin = false;
-    public Assignments(boolean isAdmin) {
+    private int userId = -1;
+    public Assignments(boolean isAdmin, int userId) {
         initComponents();
         this.isAdmin = isAdmin;
+        this.userId = userId;
         TblDrivers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TableDriversMouseClicked(evt);
@@ -424,7 +426,7 @@ public class Assignments extends javax.swing.JFrame {
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
-        Admin admin = new Admin(isAdmin);
+        Admin admin = new Admin(isAdmin, userId);
         admin.setVisible(true);
         admin.setLocationRelativeTo(null);
         this.dispose();

@@ -26,9 +26,11 @@ public class MaintenanceAdd extends javax.swing.JFrame {
     private int IdMantencion = -1;
 
     private boolean isAdmin = false;
-    public MaintenanceAdd(boolean isAdmin) {
+    private int userId = -1;
+    public MaintenanceAdd(boolean isAdmin, int userId) {
         initComponents();
         this.isAdmin = isAdmin;
+        this.userId = userId;
         TblTrucks.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TbTrucksMouseClicked(evt);
@@ -223,7 +225,15 @@ public class MaintenanceAdd extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
-        cargarCamiones();
+        if(isAdmin)
+        {
+            cargarCamionesAdmin();
+        }
+        else
+        {
+            cargarCamionesNormal();
+        }
+        
     }//GEN-LAST:event_formWindowActivated
 
     private void BtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSaveActionPerformed
@@ -296,14 +306,14 @@ public class MaintenanceAdd extends javax.swing.JFrame {
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
         // TODO add your handling code here:
-        Maintenance maintenance = new Maintenance(isAdmin);
+        Maintenance maintenance = new Maintenance(isAdmin, userId);
         maintenance.setVisible(true);
         maintenance.setLocationRelativeTo(null);
         maintenance.pack();
         this.dispose();
     }//GEN-LAST:event_BtnCancelActionPerformed
 
-    private void cargarCamiones() {
+    private void cargarCamionesAdmin() {
         DefaultTableModel modelo = new DefaultTableModel();
 
         modelo.addColumn("ID");
@@ -339,6 +349,46 @@ public class MaintenanceAdd extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+        }
+    }
+    
+    private void cargarCamionesNormal()
+    {
+        DefaultTableModel model = new DefaultTableModel();
+
+        model.addColumn("ID");
+        model.addColumn("Patente");
+        model.addColumn("Modelo");
+        model.addColumn("Kilometraje");
+
+        TblTrucks.setModel(model);
+
+        try {
+            BasedeDatos bd = new BasedeDatos();
+            Connection conn = bd.conectar();
+
+            String sql = "SELECT c.id_camion, c.patente, c.modelo, c.kilometraje "
+                    + "FROM camiones c "
+                    + "INNER JOIN camion_conductor cc ON c.id_camion = cc.id_camion "
+                    + "WHERE cc.id_conductor = ?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = new Object[4];
+                fila[0] = rs.getInt("id_camion");
+                fila[1] = rs.getString("patente");
+                fila[2] = rs.getString("modelo");
+                fila[3] = rs.getInt("kilometraje");
+
+                model.addRow(fila);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar camiones: " + e.getMessage());
         }
     }
 

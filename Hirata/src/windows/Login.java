@@ -21,14 +21,16 @@ public class Login extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
 
     private boolean isAdmin = false;
+    private int userId = -1;
     /**
      * Creates new form Login
      */
     BasedeDatos MySQL = new BasedeDatos();
 
-    public Login(boolean isAdmin) {
+    public Login(boolean isAdmin, int userId) {
         initComponents();
         this.isAdmin = isAdmin;
+        this.userId = userId;
         // Espera a que el JLabel tenga tamaño real
         java.awt.EventQueue.invokeLater(() -> {
             setImagen(jLabel1, "/images/logoHirata.png");
@@ -149,14 +151,15 @@ public class Login extends javax.swing.JFrame {
                 if (rs.next()) {
                     // Se realiza solo si el usuario es válido
                     isAdmin = rs.getBoolean("admin");
+                    userId = rs.getInt("ID_conductor");
 
                     if (isAdmin) {
-                        Admin panel = new Admin(isAdmin);
+                        Admin panel = new Admin(isAdmin, userId);
                         panel.setVisible(true);
                         panel.setLocationRelativeTo(null);
                         panel.pack();
                     } else {
-                        Normal panel = new Normal(isAdmin);
+                        Normal panel = new Normal(isAdmin, userId);
                         panel.setVisible(true);
                         panel.setLocationRelativeTo(null);
                         panel.pack();
