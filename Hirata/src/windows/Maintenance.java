@@ -4,19 +4,38 @@
  */
 package windows;
 
+import Conexion.BasedeDatos;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author usuario
  */
 public class Maintenance extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Maintenance.class.getName());
 
     /**
      * Creates new form Maintenance
      */
+    private int IdMantencion = -1;
+    private int km;
+    private String tipo;
+    private String descripcion;
+    private String estado;
+    private int idCamion;
+
     public Maintenance() {
         initComponents();
+        TblMaintenance.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TbMaintenanceMouseClicked(evt);
+            }
+        });
     }
 
     /**
@@ -33,8 +52,27 @@ public class Maintenance extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        BtnNewMaintenance = new javax.swing.JButton();
+        BtnActMaintenance = new javax.swing.JButton();
+        BtnDeleteMaintenance = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator6 = new javax.swing.JSeparator();
+        TxtSearchType = new javax.swing.JTextField();
+        TxtSearchState = new javax.swing.JTextField();
+        TxtSearchId = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TblMaintenance = new javax.swing.JTable();
+        BtnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -46,24 +84,77 @@ public class Maintenance extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("OPCIONES");
 
+        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        BtnNewMaintenance.setText("Realizar mantención");
+        BtnNewMaintenance.addActionListener(this::BtnNewMaintenanceActionPerformed);
+
+        BtnActMaintenance.setText("Actualizar mantención");
+        BtnActMaintenance.addActionListener(this::BtnActMaintenanceActionPerformed);
+
+        BtnDeleteMaintenance.setText("Eliminar mantención");
+        BtnDeleteMaintenance.addActionListener(this::BtnDeleteMaintenanceActionPerformed);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("BUSQUEDA");
+
+        TxtSearchType.setText("Busqueda por tipo");
+
+        TxtSearchState.setText("Busqueda por estado");
+        TxtSearchState.addActionListener(this::TxtSearchStateActionPerformed);
+
+        TxtSearchId.setText("Busqueda por ID");
+        TxtSearchId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtSearchIdKeyReleased(evt);
+            }
+        });
+
+        TblMaintenance.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(TblMaintenance);
+
+        BtnBack.setText("Volver");
+        BtnBack.addActionListener(this::BtnBackActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                    .addComponent(jSeparator1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jSeparator3)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 770, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator4)
+                    .addComponent(jSeparator2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BtnNewMaintenance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnActMaintenance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnDeleteMaintenance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TxtSearchId, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TxtSearchType, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TxtSearchState, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator5)
+                    .addComponent(jSeparator3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -78,11 +169,181 @@ public class Maintenance extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(369, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(BtnNewMaintenance)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnActMaintenance)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnDeleteMaintenance)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnBack)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TxtSearchId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TxtSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TxtSearchState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BtnNewMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnNewMaintenanceActionPerformed
+        // TODO add your handling code here:
+        MaintenanceAdd NewMaintenance = new MaintenanceAdd();
+        NewMaintenance.setVisible(true);
+        NewMaintenance.setLocationRelativeTo(null);
+        NewMaintenance.pack();
+        this.dispose();
+    }//GEN-LAST:event_BtnNewMaintenanceActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        cargarMantenimientos();
+
+    }//GEN-LAST:event_formWindowActivated
+
+    private void TxtSearchStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtSearchStateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtSearchStateActionPerformed
+
+    private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
+        // TODO add your handling code here:
+        Admin panel = new Admin();
+        panel.setVisible(true);
+        panel.setLocationRelativeTo(null);
+        panel.pack();
+        this.dispose();
+    }//GEN-LAST:event_BtnBackActionPerformed
+
+    private void TxtSearchIdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtSearchIdKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtSearchIdKeyReleased
+
+    private void BtnActMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActMaintenanceActionPerformed
+        // TODO add your handling code here:
+        MaintenanceAct EditMaintenance = new MaintenanceAct(IdMantencion, km, tipo, descripcion, estado, idCamion);
+        EditMaintenance.setVisible(true);
+        EditMaintenance.setLocationRelativeTo(null);
+        EditMaintenance.pack();
+        this.dispose();
+    }//GEN-LAST:event_BtnActMaintenanceActionPerformed
+
+    private void BtnDeleteMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteMaintenanceActionPerformed
+        // TODO add your handling code here:
+        if (IdMantencion == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una mantención");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar esta mantención?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        BasedeDatos bd = new BasedeDatos();
+        Connection conn = bd.conectar();
+
+        if (conn != null) {
+            try {
+                String sql = "DELETE FROM mantenimientos WHERE id_mantenimiento = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, IdMantencion);
+
+                int resultado = ps.executeUpdate();
+
+                if (resultado > 0) {
+                    JOptionPane.showMessageDialog(this, "Mantención eliminada correctamente");
+
+                    // Reiniciar
+                    IdMantencion = -1;
+
+                    // Recargar tabla
+                    cargarMantenimientos();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar");
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_BtnDeleteMaintenanceActionPerformed
+
+    private void cargarMantenimientos() {
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        modelo.addColumn("ID");
+        modelo.addColumn("Kilometraje");
+        modelo.addColumn("Tipo");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Estado");
+        modelo.addColumn("ID Camión");
+
+        BasedeDatos bd = new BasedeDatos();
+        Connection conn = bd.conectar();
+
+        if (conn != null) {
+            try {
+                String sql = "SELECT * FROM mantenimientos";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    Object[] fila = new Object[7];
+                    fila[0] = rs.getInt("id_mantenimiento");
+                    fila[1] = rs.getInt("ultimo_kilometraje");
+                    fila[2] = rs.getString("tipo");
+                    fila[3] = rs.getString("descripcion");
+                    fila[4] = rs.getString("fecha");
+                    fila[5] = rs.getString("estado");
+                    fila[6] = rs.getInt("id_camion");
+
+                    modelo.addRow(fila);
+                }
+
+                TblMaintenance.setModel(modelo);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    private void TbMaintenanceMouseClicked(java.awt.event.MouseEvent evt) {
+    int fila = TblMaintenance.getSelectedRow();
+
+    if (fila >= 0) {
+        IdMantencion = Integer.parseInt(TblMaintenance.getValueAt(fila, 0).toString());
+        km = Integer.parseInt(TblMaintenance.getValueAt(fila, 1).toString());
+        tipo = TblMaintenance.getValueAt(fila, 2).toString();
+        descripcion = TblMaintenance.getValueAt(fila, 3).toString();
+        estado = TblMaintenance.getValueAt(fila, 5).toString();
+        idCamion = Integer.parseInt(TblMaintenance.getValueAt(fila, 6).toString());
+    }
+}
 
     /**
      * @param args the command line arguments
@@ -110,10 +371,23 @@ public class Maintenance extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnActMaintenance;
+    private javax.swing.JButton BtnBack;
+    private javax.swing.JButton BtnDeleteMaintenance;
+    private javax.swing.JButton BtnNewMaintenance;
+    private javax.swing.JTable TblMaintenance;
+    private javax.swing.JTextField TxtSearchId;
+    private javax.swing.JTextField TxtSearchState;
+    private javax.swing.JTextField TxtSearchType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     // End of variables declaration//GEN-END:variables
 }

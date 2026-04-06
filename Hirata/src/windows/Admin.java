@@ -33,11 +33,12 @@ public class Admin extends javax.swing.JFrame {
         BtnDrivers = new javax.swing.JButton();
         BtnTrucks = new javax.swing.JButton();
         BtnAssign = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        BtnMaintenance = new javax.swing.JButton();
+        BtnLogout = new javax.swing.JButton();
+        BtnPendient = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -52,13 +53,14 @@ public class Admin extends javax.swing.JFrame {
         BtnAssign.setText("Asignar conductores a camiones");
         BtnAssign.addActionListener(this::BtnAssignActionPerformed);
 
-        jButton3.setText("Ver mantenciones");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
+        BtnMaintenance.setText("Ver mantenciones");
+        BtnMaintenance.addActionListener(this::BtnMaintenanceActionPerformed);
 
-        jButton1.setText("Cerrar sesión");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        BtnLogout.setText("Cerrar sesión");
+        BtnLogout.addActionListener(this::BtnLogoutActionPerformed);
 
-        jButton4.setText("Ver pendientes");
+        BtnPendient.setText("Ver pendientes");
+        BtnPendient.addActionListener(this::BtnPendientActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,9 +74,9 @@ public class Admin extends javax.swing.JFrame {
                     .addComponent(jSeparator1)
                     .addComponent(BtnDrivers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtnTrucks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(BtnMaintenance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnPendient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -91,11 +93,11 @@ public class Admin extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(BtnAssign)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(BtnMaintenance)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(BtnPendient)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(BtnLogout)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -103,7 +105,8 @@ public class Admin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDriversActionPerformed
-        // TODO add your handling code here:
+
+        //Abre la ventana de los conductores
         Drivers drivers = new Drivers();
         drivers.setVisible(true);
         drivers.setLocationRelativeTo(null);
@@ -112,7 +115,8 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnDriversActionPerformed
 
     private void BtnTrucksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTrucksActionPerformed
-        // TODO add your handling code here:
+
+        //Abre la ventana de los camiones
         Trucks trucks = new Trucks();
         trucks.setVisible(true);
         trucks.setLocationRelativeTo(null);
@@ -121,7 +125,8 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnTrucksActionPerformed
 
     private void BtnAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAssignActionPerformed
-        // TODO add your handling code here:
+
+        //Abre la ventana para asignar camiones a conductores
         Assignments assign = new Assignments();
         assign.setVisible(true);
         assign.setLocationRelativeTo(null);
@@ -129,17 +134,29 @@ public class Admin extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_BtnAssignActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void BtnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLogoutActionPerformed
+
+        //Cierra sesión
         Login login = new Login();
         login.setVisible(true);
         login.setLocationRelativeTo(null);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_BtnLogoutActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void BtnMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMaintenanceActionPerformed
+
+        //Abre la ventana de las mantenciones
+        Maintenance maintenance = new Maintenance();
+        maintenance.setVisible(true);
+        maintenance.setLocationRelativeTo(null);
+        maintenance.pack();
+        this.dispose();
+    }//GEN-LAST:event_BtnMaintenanceActionPerformed
+
+    private void BtnPendientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPendientActionPerformed
+
+        //Se ve los pendientes que no se lograron guardar
+    }//GEN-LAST:event_BtnPendientActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,10 +186,10 @@ public class Admin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAssign;
     private javax.swing.JButton BtnDrivers;
+    private javax.swing.JButton BtnLogout;
+    private javax.swing.JButton BtnMaintenance;
+    private javax.swing.JButton BtnPendient;
     private javax.swing.JButton BtnTrucks;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
