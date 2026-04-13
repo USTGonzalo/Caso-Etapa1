@@ -107,6 +107,7 @@ public class Normal extends javax.swing.JFrame {
         BtnMaintenance.addActionListener(this::BtnMaintenanceActionPerformed);
 
         jButton4.setText("Sistema offline");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Registro de kilometraje");
@@ -265,11 +266,56 @@ public class Normal extends javax.swing.JFrame {
 
                 model.addRow(fila);
             }
-
+            ComprobarKm();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar camiones: " + e.getMessage());
         }
     }//GEN-LAST:event_formWindowActivated
+
+    private void ComprobarKm() {
+        DefaultTableModel model = (DefaultTableModel) TblAssignedTrucks.getModel();
+
+        try {
+            Connection conn = MySQL.conectar();
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                int idCamion = Integer.parseInt(model.getValueAt(i, 0).toString());
+                int km = Integer.parseInt(model.getValueAt(i, 3).toString());
+
+                // Consultar si ya fue avisado
+                String checkSql = "SELECT avisado FROM camiones WHERE id_camion = ?";
+                PreparedStatement psCheck = conn.prepareStatement(checkSql);
+                psCheck.setInt(1, idCamion);
+                ResultSet rs = psCheck.executeQuery();
+
+                if (rs.next()) {
+                    int avisado = rs.getInt("avisado");
+
+                    if (km > 5000 && avisado == 0) {
+
+                        // Mostrar aviso
+                        JOptionPane.showMessageDialog(this,
+                                "El camión ID " + idCamion + " superó los 5000 KM",
+                                "Aviso de mantenimiento",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+
+                        // Marcar como avisado
+                        String updateSql = "UPDATE camiones SET avisado = 1 WHERE id_camion = ?";
+                        PreparedStatement psUpdate = conn.prepareStatement(updateSql);
+                        psUpdate.setInt(1, idCamion);
+                        psUpdate.executeUpdate();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al comprobar KM: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private void BtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRegisterActionPerformed
         // TODO add your handling code here:
@@ -339,6 +385,10 @@ public class Normal extends javax.swing.JFrame {
             TxtKm.setText("Ingrese kilometraje");
         }
     }//GEN-LAST:event_TxtKmFocusLost
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void TbTrucksMouseClicked(java.awt.event.MouseEvent evt) {
         int fila = TblAssignedTrucks.getSelectedRow();
