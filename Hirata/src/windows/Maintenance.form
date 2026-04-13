@@ -50,7 +50,7 @@
                   <Component id="jLabel2" alignment="1" max="32767" attributes="0"/>
                   <Component id="TxtSearchId" alignment="1" max="32767" attributes="0"/>
                   <Component id="TxtSearchType" alignment="1" max="32767" attributes="0"/>
-                  <Component id="TxtSearchState" alignment="1" max="32767" attributes="0"/>
+                  <Component id="TxtSearchDate" alignment="1" max="32767" attributes="0"/>
                   <Component id="jSeparator5" max="32767" attributes="0"/>
                   <Component id="jSeparator3" max="32767" attributes="0"/>
               </Group>
@@ -94,7 +94,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="TxtSearchType" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="TxtSearchState" min="-2" max="-2" attributes="0"/>
+                      <Component id="TxtSearchDate" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" pref="0" max="32767" attributes="0"/>
               </Group>
@@ -177,13 +177,21 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Busqueda por tipo"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TxtSearchTypeFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TxtSearchTypeFocusLost"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TxtSearchTypeKeyReleased"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="TxtSearchState">
+    <Component class="javax.swing.JTextField" name="TxtSearchDate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Busqueda por fecha"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TxtSearchStateActionPerformed"/>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TxtSearchDateFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TxtSearchDateFocusLost"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TxtSearchDateActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TxtSearchDateKeyReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="TxtSearchId">
@@ -191,6 +199,8 @@
         <Property name="text" type="java.lang.String" value="Busqueda por ID"/>
       </Properties>
       <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TxtSearchIdFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TxtSearchIdFocusLost"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TxtSearchIdKeyReleased"/>
       </Events>
     </Component>

@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
 
 /**
  *
@@ -28,6 +30,7 @@ public class Maintenance extends javax.swing.JFrame {
     private String descripcion;
     private String estado;
     private int idCamion;
+    private TableRowSorter<DefaultTableModel> sorter;
 
     private boolean isAdmin = false;
 
@@ -66,7 +69,7 @@ public class Maintenance extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         TxtSearchType = new javax.swing.JTextField();
-        TxtSearchState = new javax.swing.JTextField();
+        TxtSearchDate = new javax.swing.JTextField();
         TxtSearchId = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         TblMaintenance = new javax.swing.JTable();
@@ -106,11 +109,45 @@ public class Maintenance extends javax.swing.JFrame {
         jLabel3.setText("BUSQUEDA");
 
         TxtSearchType.setText("Busqueda por tipo");
+        TxtSearchType.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TxtSearchTypeFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TxtSearchTypeFocusLost(evt);
+            }
+        });
+        TxtSearchType.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtSearchTypeKeyReleased(evt);
+            }
+        });
 
-        TxtSearchState.setText("Busqueda por fecha");
-        TxtSearchState.addActionListener(this::TxtSearchStateActionPerformed);
+        TxtSearchDate.setText("Busqueda por fecha");
+        TxtSearchDate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TxtSearchDateFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TxtSearchDateFocusLost(evt);
+            }
+        });
+        TxtSearchDate.addActionListener(this::TxtSearchDateActionPerformed);
+        TxtSearchDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtSearchDateKeyReleased(evt);
+            }
+        });
 
         TxtSearchId.setText("Busqueda por ID");
+        TxtSearchId.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TxtSearchIdFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TxtSearchIdFocusLost(evt);
+            }
+        });
         TxtSearchId.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 TxtSearchIdKeyReleased(evt);
@@ -158,7 +195,7 @@ public class Maintenance extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(TxtSearchId, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(TxtSearchType, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TxtSearchState, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TxtSearchDate, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSeparator5)
                     .addComponent(jSeparator3))
                 .addContainerGap())
@@ -197,7 +234,7 @@ public class Maintenance extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TxtSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(TxtSearchState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(TxtSearchDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -229,9 +266,9 @@ public class Maintenance extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowActivated
 
-    private void TxtSearchStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtSearchStateActionPerformed
+    private void TxtSearchDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtSearchDateActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TxtSearchStateActionPerformed
+    }//GEN-LAST:event_TxtSearchDateActionPerformed
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         // TODO add your handling code here:
@@ -251,6 +288,7 @@ public class Maintenance extends javax.swing.JFrame {
 
     private void TxtSearchIdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtSearchIdKeyReleased
         // TODO add your handling code here:
+        aplicarFiltros();
     }//GEN-LAST:event_TxtSearchIdKeyReleased
 
     private void BtnActMaintenanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActMaintenanceActionPerformed
@@ -313,6 +351,59 @@ public class Maintenance extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnDeleteMaintenanceActionPerformed
 
+    private void TxtSearchTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtSearchTypeKeyReleased
+        // TODO add your handling code here:
+        aplicarFiltros();
+    }//GEN-LAST:event_TxtSearchTypeKeyReleased
+
+    private void TxtSearchDateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtSearchDateKeyReleased
+        // TODO add your handling code here:
+        aplicarFiltros();
+    }//GEN-LAST:event_TxtSearchDateKeyReleased
+
+    private void TxtSearchIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtSearchIdFocusGained
+        // TODO add your handling code here:
+        if ("Busqueda por ID".equals(this.TxtSearchId.getText())) {
+            TxtSearchId.setText("");
+        }
+    }//GEN-LAST:event_TxtSearchIdFocusGained
+
+    private void TxtSearchIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtSearchIdFocusLost
+        // TODO add your handling code here:
+        if ("".equals(this.TxtSearchId.getText())) {
+            TxtSearchId.setText("Busqueda por ID");
+            
+        }
+    }//GEN-LAST:event_TxtSearchIdFocusLost
+
+    private void TxtSearchTypeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtSearchTypeFocusGained
+        // TODO add your handling code here:
+        if ("Busqueda por tipo".equals(this.TxtSearchId.getText())) {
+            TxtSearchId.setText("");
+        }
+    }//GEN-LAST:event_TxtSearchTypeFocusGained
+
+    private void TxtSearchTypeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtSearchTypeFocusLost
+        // TODO add your handling code here:
+        if ("".equals(this.TxtSearchId.getText())) {
+            TxtSearchId.setText("Busqueda por tipo");
+        }
+    }//GEN-LAST:event_TxtSearchTypeFocusLost
+
+    private void TxtSearchDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtSearchDateFocusGained
+        // TODO add your handling code here:
+        if ("Busqueda por fecha".equals(this.TxtSearchId.getText())) {
+            TxtSearchId.setText("");
+        }
+    }//GEN-LAST:event_TxtSearchDateFocusGained
+
+    private void TxtSearchDateFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtSearchDateFocusLost
+        // TODO add your handling code here:}
+        if ("".equals(this.TxtSearchId.getText())) {
+            TxtSearchId.setText("Busqueda por fecha");
+        }
+    }//GEN-LAST:event_TxtSearchDateFocusLost
+
     private void cargarMantenimientosAdmin() {
         DefaultTableModel modelo = new DefaultTableModel();
 
@@ -347,6 +438,8 @@ public class Maintenance extends javax.swing.JFrame {
                 }
 
                 TblMaintenance.setModel(modelo);
+                sorter = new TableRowSorter<>((DefaultTableModel) TblMaintenance.getModel());
+                TblMaintenance.setRowSorter(sorter);
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
@@ -357,6 +450,39 @@ public class Maintenance extends javax.swing.JFrame {
             }
         }
     }
+    
+    private void aplicarFiltros() {
+    if (sorter == null) return;
+
+    try {
+        String id = TxtSearchId.getText().trim();
+        String tipo = TxtSearchType.getText().trim();
+        String fecha = TxtSearchDate.getText().trim();
+
+        java.util.List<RowFilter<Object, Object>> filtros = new java.util.ArrayList<>();
+
+        if (!id.isEmpty() && !id.equals("Busqueda por ID")) {
+            filtros.add(RowFilter.regexFilter("(?i)" + id, 0));
+        }
+
+        if (!tipo.isEmpty() && !tipo.equals("Busqueda por tipo")) {
+            filtros.add(RowFilter.regexFilter("(?i)" + tipo, 2));
+        }
+
+        if (!fecha.isEmpty() && !fecha.equals("Busqueda por fecha")) {
+            filtros.add(RowFilter.regexFilter("(?i)" + fecha, 4));
+        }
+
+        if (filtros.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(RowFilter.andFilter(filtros));
+        }
+
+    } catch (Exception e) {
+        sorter.setRowFilter(null);
+    }
+}
 
     private void cargarMantenimientosNormal() {
         DefaultTableModel modelo = new DefaultTableModel();
@@ -398,6 +524,8 @@ public class Maintenance extends javax.swing.JFrame {
                 }
 
                 TblMaintenance.setModel(modelo);
+                sorter = new TableRowSorter<>((DefaultTableModel) TblMaintenance.getModel());
+                TblMaintenance.setRowSorter(sorter);
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
@@ -453,8 +581,8 @@ public class Maintenance extends javax.swing.JFrame {
     private javax.swing.JButton BtnDeleteMaintenance;
     private javax.swing.JButton BtnNewMaintenance;
     private javax.swing.JTable TblMaintenance;
+    private javax.swing.JTextField TxtSearchDate;
     private javax.swing.JTextField TxtSearchId;
-    private javax.swing.JTextField TxtSearchState;
     private javax.swing.JTextField TxtSearchType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
